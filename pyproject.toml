@@ -1,37 +1,48 @@
-[tool.poetry]
+[project]
 name = "learn_python"
 version = "0.1.0"
 description = ""
-authors = ["Kaito Shigyo <shugyo596@outlook.com>"]
+authors = [
+    { name = "Kaito Shigyo / 執行凱斗", email = "shugyo596@outlook.com" }
+]
+dependencies = [
+    "jupyter>=1.0.0",
+    "beartype>=0.17.2",
+    "ibis-framework>=8.0.0",
+    "jax>=0.4.25",
+    "jaxtyping>=0.2.25",
+    "plotly>=5.19.0",
+    "numpy>=1.26.4",
+    "polars>=0.20.10",
+    "matplotlib>=3.8.3",
+    "seaborn>=0.13.2",
+]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.12"
-pydantic = "^2.6.1"
-beartype = "^0.17.2"
-ipykernel = "^6.29.2"
-ipywidgets = "^8.1.2"
-jupyter = "^1.0.0"
-numpy = "^1.26.4"
-nptyping = "^2.5.0"
-pandas = "^2.2.0"
-polars = "^0.20.10"
-ibis-framework = {extras = ["duckdb", "pandas", "polars"], version = "^8.0.0"}
-matplotlib = "^3.8.3"
-seaborn = "^0.13.2"
-plotly = "^5.19.0"
-jax = {extras = ["cpu"], version = "^0.4.24"}
-jaxtyping = "^0.2.25"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.3"
-pytest-cov = "^4.1.0"
-ruff = "^0.1.4"
-pyright = "^1.1.347"
+requires-python = ">= 3.11"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "pytest>=7.4.4",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.4",
+    "pyright>=1.1.347",
+]
+
+[tool.rye.scripts]
+format = { chain = ["ruff format src", "ruff check --fix src"] }
+lint = { chain = ["ruff check src", "pyright"] }
+test = { chain = ["python -m pytest tests"] }
 
 [tool.ruff]
 target-version = "py312"
@@ -84,7 +95,6 @@ ignore = [
     "ISC", #flake8-implicit-str-concat
     "N", # pep8-naming
     "PT", # flake8-pytest-style
-    "F722", # jaxtypingの"N P"などを無視
     "W191", # from
     "E111",
     "E114",
@@ -106,7 +116,7 @@ ignore = [
 include = ["src", "tests"] # automatically exclude **/__pycache__, **/.*, **/.venv
 stubPath = "stubs"
 venvPath = ".venv"
-venv = "learn-python-py3.12"
+# venv = "venv_name"
 
 pythonVersion = "3.12"
 # pythonPlatform = "linux"
